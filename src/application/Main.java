@@ -270,6 +270,10 @@ public class Main extends Application {
 			errorMessage.setText(ex.getMessage());
 			System.out.println("error");
 		}
+		catch (NumberFormatException ex) {
+			message.setText("Error");
+			errorMessage.setText("Reason: action not a number");
+		}
 		
 	}
 	private void createOS() {
@@ -292,6 +296,10 @@ public class Main extends Application {
 		}
 		catch (JSONException ex) {
 			errorMessage.setText(ex.getMessage());
+		}
+		catch (NumberFormatException ex) {
+			message.setText("Error");
+			errorMessage.setText("Reason: action not a number");
 		}
 		
 	}
@@ -318,13 +326,14 @@ public class Main extends Application {
 	}
 	private boolean checkOSFields() {
 		for (int i = 0; i < packageInfo.size(); i ++) {
+			
 			if (packageInfo.get(i).getValueName().isEmpty() | packageInfo.get(i).getValueName().indexOf(',') >= 0) {
 				errorMessage.setText("Reason3: " + packageInfo.get(i).getKeyName());
 				return false;
 			}
 		}
 		for (int i = 0; i < componentInfo.size(); i ++) {
-			if (componentInfo.get(i).getIdValue() == 7) {
+			if (componentInfo.get(i).getIdValue() == 3) {
 				if (componentInfo.get(i).getVersionName().isEmpty() | componentInfo.get(i).getVersionName().indexOf(',') >= 0 ) {
 					errorMessage.setText("Reason4: " + componentInfo.get(i).getCompName());
 					return false;
@@ -405,6 +414,7 @@ public class Main extends Application {
 	                    if (file != null) {
 	                        try {
 								openFile(new FileReader(file),false);
+								GenerateOSName.setText(file.getName()); GenerateJSONName.setText(file.getName());
 							} catch (FileNotFoundException e1) {
 								e1.printStackTrace();
 							}
@@ -417,6 +427,7 @@ public class Main extends Application {
 	                	try {
 	                		configPackageInfo.clear(); configComponentInfo.clear(); configOptionalInfo.clear();
 	                		packageInfo.clear(); componentInfo.clear(); optionalInfo.clear();
+	                		GenerateOSName.clear(); GenerateJSONName.clear();
 							openFile(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(config_file)),true);
 						} catch (Exception e1) {
 							e1.printStackTrace();
@@ -443,9 +454,12 @@ public class Main extends Application {
 	    hb2.getChildren().addAll(btn,GenerateJSONName);
 	    hb2.setSpacing(3);
 	    GenerateJSONName.setText("components.json");
+	    hb1.setHgrow(GenerateOSName, Priority.ALWAYS);
+	    hb2.setHgrow(GenerateJSONName, Priority.ALWAYS);
 	    final HBox hb3 = new HBox();
 	    hb3.getChildren().addAll(message,errorMessage);
-	    hb3.setSpacing(5);
+	    hb3.setAlignment(Pos.CENTER);
+	    hb3.setSpacing(3);
 	    mainGrid.add(hb0, 0, 0);
 	    mainGrid.add(hb2, 1, 3);
 	    mainGrid.add(hb1, 0, 3);
@@ -600,7 +614,7 @@ public class Main extends Application {
 	        new EventHandler<CellEditEvent<TableEntry1, String>>() {
 	            @Override
 	            public void handle(CellEditEvent<TableEntry1, String> t) {
-	                if (!t.getNewValue().isEmpty())
+	              //  if (!t.getNewValue().isEmpty())
 	                	((TableEntry1) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValueName(t.getNewValue());
 	            }
 	        }
@@ -671,7 +685,7 @@ public class Main extends Application {
 	        new EventHandler<CellEditEvent<TableEntry2, String>>() {
 	            @Override
 	            public void handle(CellEditEvent<TableEntry2, String> t) {
-	            	if (!t.getNewValue().isEmpty())
+	            //	if (!t.getNewValue().isEmpty())
 	            		((TableEntry2) t.getTableView().getItems().get( t.getTablePosition().getRow())).setVersionName(t.getNewValue());
 	            }
 	        }
@@ -749,7 +763,7 @@ public class Main extends Application {
 	        new EventHandler<CellEditEvent<TableEntry3, String>>() {
 	            @Override
 	            public void handle(CellEditEvent<TableEntry3, String> t) {
-	            	if (!t.getNewValue().isEmpty())
+	            //	if (!t.getNewValue().isEmpty())
 	            		((TableEntry3) t.getTableView().getItems().get( t.getTablePosition().getRow()) ).setVersionName(t.getNewValue());
 	            }
 	        }

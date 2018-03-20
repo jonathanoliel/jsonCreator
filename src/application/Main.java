@@ -285,7 +285,7 @@ public class Main extends Application {
 			for (int i = 0; i < componentInfo.size(); i ++) {
 				switch(componentInfo.get(i).getCompName()) {
 				case("OS"):
-					addObject(7, "OS",	componentInfo.get(i).getVersionName(),  OSFilePath.getText(), "OS", ".zip", OSBaseVersion.getText() );  
+					addObject(3, "OS",	componentInfo.get(i).getVersionName(),  OSFilePath.getText(), "OS", ".zip", OSBaseVersion.getText() );  
 					break;
 				}	
 			}
@@ -354,7 +354,7 @@ public class Main extends Application {
 	private static void addObject(int id, String name, String component_version, String filePath, String description, String type, String baseversion) throws JSONException {
 		JSONObject ob = new JSONObject();
 		filePath = filePath.endsWith(".zip") ? filePath : filePath + ".zip";		
-		ob.put("id", 3);
+		ob.put("id", id);
 		ob.put("name",name);
 		ob.put("version", component_version);
 		ob.put("filepath", filePath);

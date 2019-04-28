@@ -2,20 +2,23 @@
  "components": [
   {
    "filepath": "vph-components/servers-control/ServersService-v",
+   "type": ".apk",
    "name": "ServersControl",
    "description": "Server Service",
    "id": 0,
    "version": ""
   },
   {
-   "filepath": "vph-components/vsim-control/VSimService-v",
+   "filepath": "vph-components/vsim-control/VsimService-v",
+   "type": ".apk",
    "name": "VSimControl",
    "description": "Vsim services",
    "id": 1,
    "version": ""
   },
   {
-   "filepath": "vph-components/atmel/VSim-v",
+   "filepath": "vph-components/atmel/Vsim-v",
+   "type": ".sgo",
    "name": "Atmel",
    "description": "Atmel",
    "id": 2,
@@ -23,77 +26,88 @@
   },
   {
    "filepath": "vph-components/servers4g/Servers4G-v",
+   "type": ".apk",
    "name": "Server 4G",
    "description": "Server 4G",
    "id": 3,
    "version": ""
   },
   {
-   "filepath": "vph-components/gui/Gui-v",
+   "filepath": "vph-components/gui/gui-v",
+   "type": ".apk",
    "name": "GUI",
    "description": "GUI",
-   "id": 4,
+   "id": 100,
    "version": ""
   },
   {
    "filepath": "vph-components/log-service/LogService-v",
+   "type": ".apk",
    "name": "Log Service",
    "description": "Log Service",
-   "id": 5,
+   "id": 4,
    "version": ""
   },
   {
    "filepath": "vph-components/config/config-v",
+   "type": ".json",
    "name": "AP-Configuration",
    "description": "Configurations",
-   "id": 6,
+   "id": 5,
    "version": ""
   },
   {
    "base_version": "",
    "filepath": "vph-components/OS/",
+   "type": ".zip",
    "name": "OS",
    "description": "OS",
-   "id": 7,
+   "id": 6,
    "version": ""
   },
   {
    "filepath": "vph-components/captive-portal/mifi-v",
+   "type": ".apk",
    "name": "Captive Portal",
    "description": "Captive Portal",
-   "id": 100,
+   "id": 1000,
    "version": ""
   },
   {
    "filepath": "gui/",
+   "type": ".zip",
    "name": "Gui-Configurations",
    "description": "Gui-Configurations",
-   "id": 101,
+   "id": 2001,
    "version": ""
   },
   {
    "filepath": "vph-components/",
+   "type": ".db",
    "name": "Telephony DB",
    "description": "Telephony DB",
-   "id": 102,
+   "id": 1001,
    "version": ""
   },
   {
    "filepath": "vph-components/",
+   "type": ".xml",
    "name": "APN",
    "description": "APN",
-   "id": 103,
+   "id": 1002,
    "version": ""
   },
   {
-   "filepath": "vph-components/web-server/WebServer-v",
+   "filepath": "vph-components/web-server/WebServers-v",
+   "type": ".apk",
    "name": "WEB SERVER",
    "description": "WEB SERVER",
-   "id": 104,
+   "id": 1003,
    "version": ""
   }
  ],
  "package_version": "",
+ "id": "",
  "name": "",
  "action": "",
  "version": ""

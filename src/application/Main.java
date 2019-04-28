@@ -214,7 +214,15 @@ public class Main extends Application {
 			for (int i = 0; i < componentInfo.size(); i ++) {
 				String version = componentInfo.get(i).getVersionName();
 				String filepath = componentInfo.get(i).getFilePathName();
-				switch(componentInfo.get(i).getIdValue()) {
+				String type = componentInfo.get(i).getType();
+				String name = componentInfo.get(i).getCompName();
+				String desc = componentInfo.get(i).getDesc();
+				int currId = componentInfo.get(i).getIdValue();
+				if (!name.equals("OS"))
+					addObject(currId, name , version, filepath, desc, type);
+				else
+					addObject(currId, name,	version, OSFilePath.getText(), desc, type, OSBaseVersion.getText() );  
+			/*	switch(componentInfo.get(i).getIdValue()) {
 				case(0): 
 					addObject(0, "ServersControl", 	version , 	filepath, "Server Service", ".apk");
 					break;
@@ -240,13 +248,19 @@ public class Main extends Application {
 					addObject(7, "OS",				version, 	 OSFilePath.getText(), "OS", ".zip", OSBaseVersion.getText() );  
 					break;
 				}	
+				*/
 			}
 			for (int i = 0; i < optionalInfo.size(); i ++) {
 				if (!optionalInfo.get(i).getActive())
 					continue;
 				String version = optionalInfo.get(i).getVersionName();
 				String filepath = optionalInfo.get(i).getFilePathName();
-				switch(optionalInfo.get(i).getIdValue()) {
+				int currId = optionalInfo.get(i).getIdValue();
+				String name = optionalInfo.get(i).getCompName();
+				String desc = optionalInfo.get(i).getDesc();
+				String type = optionalInfo.get(i).getType();
+				addObject(currId, name , version, filepath, desc, type);
+		/*		switch(optionalInfo.get(i).getIdValue()) {
 				case(100): 
 					addObject(100, "Captive Portal", 		version, 	filepath, 	"Captive Portal", 	".zip");
 					break;
@@ -262,7 +276,8 @@ public class Main extends Application {
 				case(104):
 					addObject(104, "WEB SERVER",			 version, 	filepath,	"WEB SERVER", 		".apk");
 					break;
-				}	
+				}
+				*/
 			}
 		
 		}
@@ -309,16 +324,20 @@ public class Main extends Application {
 		if (!checkOSFields()) {
 			return false;
 		}
+		if (componentInfo.size() < 7) {
+			errorMessage.setText("Reason: missing components");
+			return false;
+		}
 		for (int i = 0; i < componentInfo.size(); i ++) {
 			
 			if (componentInfo.get(i).getVersionName().isEmpty() | componentInfo.get(i).getVersionName().indexOf(',') >= 0) {
-				errorMessage.setText("Reason1: " + componentInfo.get(i).getCompName());
+				errorMessage.setText("Reason: " + componentInfo.get(i).getCompName());
 				return false;
 			}			
 		}
 		for (int i = 0; i < optionalInfo.size(); i ++) {
 			if (optionalInfo.get(i).getActive() && (optionalInfo.get(i).getVersionName().isEmpty() | optionalInfo.get(i).getVersionName().indexOf(',') >= 0)){
-				errorMessage.setText("Reason2: " + optionalInfo.get(i).getCompName());
+				errorMessage.setText("Reason: " + optionalInfo.get(i).getCompName());
 				return false;
 			}
 		}
@@ -328,18 +347,18 @@ public class Main extends Application {
 		for (int i = 0; i < packageInfo.size(); i ++) {
 			
 			if (packageInfo.get(i).getValueName().isEmpty() | packageInfo.get(i).getValueName().indexOf(',') >= 0) {
-				errorMessage.setText("Reason3: " + packageInfo.get(i).getKeyName());
+				errorMessage.setText("Reason: " + packageInfo.get(i).getKeyName());
 				return false;
 			}
 		}
 		for (int i = 0; i < componentInfo.size(); i ++) {
 			if (componentInfo.get(i).getIdValue() == 3) {
 				if (componentInfo.get(i).getVersionName().isEmpty() | componentInfo.get(i).getVersionName().indexOf(',') >= 0 ) {
-					errorMessage.setText("Reason4: " + componentInfo.get(i).getCompName());
+					errorMessage.setText("Reason: " + componentInfo.get(i).getCompName());
 					return false;
 				}
 				if ((OSBaseVersion.getText().indexOf(',') >= 0)) {
-					errorMessage.setText("Reason5: bad base version");
+					errorMessage.setText("Reason: bad base version");
 					return false;
 				}
 			}
@@ -497,20 +516,22 @@ public class Main extends Application {
 			for (JsonElement el : array) {
 				String name = el.getAsJsonObject().get("name").getAsString();
 				String version = el.getAsJsonObject().get("version").getAsString();
+				String desc = el.getAsJsonObject().get("description").getAsString();
 				int id =  el.getAsJsonObject().get("id").getAsInt();
 				String filePath =  el.getAsJsonObject().get("filepath").getAsString();
-				if (  id < 100) {
-					componentInfo.add(new TableEntry2(name,version,id,filePath));
-					configComponentInfo.add(new TableEntry2(name,version,id,filePath));
-					if (id  == 7) {
+				String type = el.getAsJsonObject().get("type").getAsString();
+				if (  id < 1000) {
+					componentInfo.add(new TableEntry2(name,version,id,filePath, desc, type));
+					configComponentInfo.add(new TableEntry2(name,version,id,filePath, desc, type));
+					if (name.equals("OS")) {
 						if ((el.getAsJsonObject()).has("base_version"))
 							OSBaseVersion.setText((el.getAsJsonObject()).get("base_version").getAsString());
 						OSFilePath.setText(filePath);
 					}
 				}
 				else {
-					optionalInfo.add(new TableEntry3(name,version,id,filePath,false));
-					configOptionalInfo.add(new TableEntry3(name,version,id,filePath,false));
+					optionalInfo.add(new TableEntry3(name,version,id,filePath, desc, type, false));
+					configOptionalInfo.add(new TableEntry3(name,version,id,filePath, desc, type, false));
 				}
 				
 			}
@@ -534,16 +555,18 @@ public class Main extends Application {
 				String version = el.getAsJsonObject().get("version").getAsString();
 				int id =  el.getAsJsonObject().get("id").getAsInt();
 				String filePath =  el.getAsJsonObject().get("filepath").getAsString();
-				if (  id < 100) {
+				String type = getExt(filePath); 		
+				String desc = el.getAsJsonObject().get("description").getAsString();
+				if (  id < 1000) {
 						for (int i = 0; i < configComponentInfo.size(); i ++) {
 							if (configComponentInfo.get(i).getIdValue() == id) {
 							//	componentInfo.get(i).setVersionName(version);
 							//		filePath = componentInfo.remove(i).getFilePathName();
-									componentInfo.add(new TableEntry2(name,version,id,configComponentInfo.get(i).getFilePathName()));
+									componentInfo.add(new TableEntry2(name,version,id,configComponentInfo.get(i).getFilePathName(), desc, type));
 								
 							}
 						}
-						if (id  == 7) {
+						if (name.equals("OS")) {
 							if ((el.getAsJsonObject()).has("base_version"))
 								OSBaseVersion.setText((el.getAsJsonObject()).get("base_version").getAsString());
 							OSFilePath.setText((el.getAsJsonObject()).get("filepath").getAsString());
@@ -554,7 +577,7 @@ public class Main extends Application {
 						if (configOptionalInfo.get(i).getIdValue() == id) {
 							//optionalInfo.get(i).setVersionName(version);
 							//	filePath = optionalInfo.remove(i).getFilePathName();				
-								optionalInfo.add(new TableEntry3(name,version,id,configOptionalInfo.get(i).getFilePathName(),true));
+								optionalInfo.add(new TableEntry3(name,version,id,configOptionalInfo.get(i).getFilePathName(),desc, type,true));
 						}			
 					}
 				}
@@ -563,6 +586,8 @@ public class Main extends Application {
 				String name = configOptionalInfo.get(i).getCompName();
 				String version = configOptionalInfo.get(i).getVersionName();
 				int id =  configOptionalInfo.get(i).getIdValue();
+				String type = configOptionalInfo.get(i).getType();
+				String desc = configOptionalInfo.get(i).getDesc();
 				boolean found = false;
 				for (int j = 0; j < optionalInfo.size(); j++) {
 					if (configOptionalInfo.get(i).getIdValue() == optionalInfo.get(j).getIdValue()) {
@@ -570,7 +595,7 @@ public class Main extends Application {
 					}
 				}
 				if (!found) {
-					optionalInfo.add(new TableEntry3(name,version,id,configOptionalInfo.get(i).getFilePathName(),false));
+					optionalInfo.add(new TableEntry3(name,version,id,configOptionalInfo.get(i).getFilePathName(),desc,type,false));
 				}
 			}
 		//	componentInfo.add(new TableEntry2("","",-1,""));
@@ -849,6 +874,14 @@ public class Main extends Application {
 	    vb.setAlignment(Pos.CENTER);
 	    Scene addRemoveScene = new Scene(vb, 300, 200);
 	    addRemove.setScene(addRemoveScene);
+	}
+	
+	private String getExt(String filePath) {
+		int j = filePath.lastIndexOf('.');
+		if (j > 0) {
+			return filePath.substring(j);
+		}
+		return "some illegal shit";
 	}
 
 

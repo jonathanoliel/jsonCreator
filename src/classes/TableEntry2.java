@@ -7,11 +7,24 @@ public class TableEntry2 {
 	    public final SimpleStringProperty versionName;
 	    public final SimpleIntegerProperty idValue;
 	    public final SimpleStringProperty filePathName;
-	    public TableEntry2(String fkey, String fvalue, int fidValue, String fpath) {
+	    public String desc, type;
+	    
+	    public TableEntry2(String fkey, String fvalue, int fidValue, String fpath, String desc, String type) {
 	        this.compName = new SimpleStringProperty(fkey);  
 	        this.versionName = new SimpleStringProperty(fvalue);
 	        this.idValue = new SimpleIntegerProperty(fidValue);
 	        this.filePathName = new SimpleStringProperty(fpath);
+	        this.type = type;
+	        this.desc = desc;
+
+	    }
+	    
+	    public String getType() {
+	    	return type;
+	    }
+	    
+	    public String getDesc() {
+	    	return desc;
 	    }
 
 	    public String getCompName() {
